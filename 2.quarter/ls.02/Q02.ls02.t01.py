@@ -30,6 +30,42 @@ vacancies = []
 
 
 
+main_link = 'https://russia.superjob.ru'
+search_link = '/vacancy/search/?keywords=%D0%A0%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA%201%D0%A1'
+user_agent = {'User-agent': 'Mozilla/5.0'}
+# Разработчик 1С
+
+NextPossible = True
+count = 1;
+while NextPossible:
+    # print(count)
+    print(main_link + search_link + '&page='+ str(count))
+    response = requests.get(main_link + search_link + '&page='+ str(count), headers=user_agent).text
+    soup = bs(response, 'lxml')
+
+    vacancies_block = soup.find('div', {'class': '_1ID8B'})
+    vacancies_list = vacancies_block.find_all('div', {'class': '_3zucV'})
+    vacancies_list = vacancies_block.findChildren(recursive=False)
+    pprint(len(vacancies_list))
+    pprint(vacancies_list)
+
+    for vacancy in vacancies_list:
+        vacancies_data = {}
+        vacancy_name = 'test' #vacancy.find('f-test-text-company-item-salary').getText()
+        vacancies_data['name'] = vacancy_name
+
+        vacancies.append(vacancies_data)
+
+    pprint(vacancies)
+
+    NextPossible = False;
+
+
+
+pprint(vacancies)
+
+exit(1)
+
 main_link = 'https://hh.ru'
 search_link = '/search/vacancy?text=%D0%A0%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA+1%D1%81'
 # Разработчик 1С
@@ -97,36 +133,3 @@ exit(1)
 # а тут не получилось (
 
 
-main_link = 'https://russia.superjob.ru'
-search_link = '/vacancy/search/?keywords=%D0%A0%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%87%D0%B8%D0%BA%201%D0%A1'
-user_agent = {'User-agent': 'Mozilla/5.0'}
-# Разработчик 1С
-
-NextPossible = True
-count = 1;
-while NextPossible:
-    # print(count)
-    print(main_link + search_link + '&page='+ str(count))
-    response = requests.get(main_link + search_link + '&page='+ str(count), headers=user_agent).text
-    soup = bs(response, 'lxml')
-
-    vacancies_block = soup.find('div', {'class': '_1ID8B'})
-    vacancies_list = vacancies_block.find_all('div', {'class': '_3zucV _1fMKr undefined _1NAsu'})
-    vacancies_list = vacancies_block.findChildren(recursive=False)
-    pprint(len(vacancies_list))
-    pprint(vacancies_list)
-
-    for vacancy in vacancies_list:
-        vacancies_data = {}
-        vacancy_name = 'test' #vacancy.find('f-test-text-company-item-salary').getText()
-        vacancies_data['name'] = vacancy_name
-
-        vacancies.append(vacancies_data)
-
-    pprint(vacancies)
-
-    NextPossible = False;
-
-
-
-pprint(vacancies)
